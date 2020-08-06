@@ -18,7 +18,6 @@
 
 package net.openhft.compiler;
 
-import org.jetbrains.annotations.NotNull;
 import sun.misc.Unsafe;
 
 import javax.tools.*;
@@ -100,7 +99,7 @@ class MyJavaFileManager implements JavaFileManager {
             if (success) {
 
                 return new SimpleJavaFileObject(URI.create(className), kind) {
-                    @NotNull
+
                     public InputStream openInputStream() {
                         return new ByteArrayInputStream(bytes);
                     }
@@ -110,10 +109,10 @@ class MyJavaFileManager implements JavaFileManager {
         return fileManager.getJavaFileForInput(location, className, kind);
     }
 
-    @NotNull
+
     public JavaFileObject getJavaFileForOutput(Location location, final String className, Kind kind, FileObject sibling) {
         return new SimpleJavaFileObject(URI.create(className), kind) {
-            @NotNull
+
             public OutputStream openOutputStream() {
                 ByteArrayOutputStream baos = new ByteArrayOutputStream();
                 buffers.put(className, baos);
@@ -146,7 +145,7 @@ class MyJavaFileManager implements JavaFileManager {
         buffers.clear();
     }
 
-    @NotNull
+
     public Map<String, byte[]> getAllBuffers() {
         synchronized (buffers) {
             Map<String, byte[]> ret = new LinkedHashMap<>(buffers.size() * 2);

@@ -18,8 +18,6 @@
 
 package net.openhft.compiler;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import sun.misc.Unsafe;
@@ -96,7 +94,7 @@ public enum CompilerUtils {
      * @throws IOException            the resource could not be loaded.
      * @throws ClassNotFoundException the class name didn't match or failed to initialise.
      */
-    public static Class loadFromResource(@NotNull String className, @NotNull String resourceName) throws IOException, ClassNotFoundException {
+    public static Class loadFromResource(String className, String resourceName) throws IOException, ClassNotFoundException {
         return loadFromJava(className, readText(resourceName));
     }
 
@@ -108,7 +106,7 @@ public enum CompilerUtils {
      * @return the outer class loaded.
      * @throws ClassNotFoundException the class name didn't match or failed to initialise.
      */
-    private static Class loadFromJava(@NotNull String className, @NotNull String javaCode) throws ClassNotFoundException {
+    private static Class loadFromJava(String className, String javaCode) throws ClassNotFoundException {
         return CACHED_COMPILER.loadFromJava(Thread.currentThread().getContextClassLoader(), className, javaCode);
     }
 
@@ -118,7 +116,7 @@ public enum CompilerUtils {
      * @param dir to add.
      * @return whether the directory was found, if not it is not added either.
      */
-    public static boolean addClassPath(@NotNull String dir) {
+    public static boolean addClassPath(String dir) {
         File file = new File(dir);
         if (file.exists()) {
             String path;
@@ -143,7 +141,7 @@ public enum CompilerUtils {
      * @param className expected to load.
      * @param bytes     of the byte code.
      */
-    public static void defineClass(@NotNull String className, @NotNull byte[] bytes) {
+    public static void defineClass(String className, byte[] bytes) {
         defineClass(Thread.currentThread().getContextClassLoader(), className, bytes);
     }
 
@@ -154,7 +152,7 @@ public enum CompilerUtils {
      * @param className   expected to load.
      * @param bytes       of the byte code.
      */
-    public static Class defineClass(@Nullable ClassLoader classLoader, @NotNull String className, @NotNull byte[] bytes) {
+    public static Class defineClass(ClassLoader classLoader, String className, byte[] bytes) {
         try {
             return (Class) DEFINE_CLASS_METHOD.invoke(classLoader, className, bytes, 0, bytes.length);
         } catch (IllegalAccessException e) {
@@ -165,7 +163,7 @@ public enum CompilerUtils {
         }
     }
 
-    private static String readText(@NotNull String resourceName) throws IOException {
+    private static String readText(String resourceName) throws IOException {
         if (resourceName.startsWith("="))
             return resourceName.substring(1);
         StringWriter sw = new StringWriter();
@@ -181,8 +179,8 @@ public enum CompilerUtils {
         return sw.toString();
     }
 
-    @NotNull
-    private static String decodeUTF8(@NotNull byte[] bytes) {
+
+    private static String decodeUTF8(byte[] bytes) {
         try {
             return new String(bytes, UTF_8.name());
         } catch (UnsupportedEncodingException e) {
@@ -190,9 +188,9 @@ public enum CompilerUtils {
         }
     }
 
-    @Nullable
+
     @SuppressWarnings("ReturnOfNull")
-    private static byte[] readBytes(@NotNull File file) {
+    private static byte[] readBytes(File file) {
         if (!file.exists()) return null;
         long len = file.length();
         if (len > Runtime.getRuntime().totalMemory() / 10)
@@ -211,7 +209,7 @@ public enum CompilerUtils {
         return bytes;
     }
 
-    private static void close(@Nullable Closeable closeable) {
+    private static void close(Closeable closeable) {
         if (closeable != null)
             try {
                 closeable.close();
@@ -220,12 +218,12 @@ public enum CompilerUtils {
             }
     }
 
-    public static boolean writeText(@NotNull File file, @NotNull String text) {
+    public static boolean writeText(File file, String text) {
         return writeBytes(file, encodeUTF8(text));
     }
 
-    @NotNull
-    private static byte[] encodeUTF8(@NotNull String text) {
+
+    private static byte[] encodeUTF8(String text) {
         try {
             return text.getBytes(UTF_8.name());
         } catch (UnsupportedEncodingException e) {
@@ -233,7 +231,7 @@ public enum CompilerUtils {
         }
     }
 
-    public static boolean writeBytes(@NotNull File file, @NotNull byte[] bytes) {
+    public static boolean writeBytes(File file, byte[] bytes) {
         File parentDir = file.getParentFile();
         if (!parentDir.isDirectory() && !parentDir.mkdirs())
             throw new IllegalStateException("Unable to create directory " + parentDir);
@@ -262,8 +260,8 @@ public enum CompilerUtils {
         return true;
     }
 
-    @NotNull
-    private static InputStream getInputStream(@NotNull String filename) throws FileNotFoundException {
+
+    private static InputStream getInputStream(String filename) throws FileNotFoundException {
         if (filename.isEmpty()) throw new IllegalArgumentException("The file name cannot be empty.");
         if (filename.charAt(0) == '=') return new ByteArrayInputStream(encodeUTF8(filename.substring(1)));
         ClassLoader contextClassLoader = Thread.currentThread().getContextClassLoader();

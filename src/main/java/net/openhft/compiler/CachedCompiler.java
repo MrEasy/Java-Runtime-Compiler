@@ -18,8 +18,6 @@
 
 package net.openhft.compiler;
 
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,15 +41,15 @@ public class CachedCompiler implements Closeable {
     private final Map<ClassLoader, Map<String, Class>> loadedClassesMap = Collections.synchronizedMap(new WeakHashMap<>());
     private final Map<ClassLoader, MyJavaFileManager> fileManagerMap = Collections.synchronizedMap(new WeakHashMap<>());
 
-    @Nullable
+
     private final File sourceDir;
-    @Nullable
+
     private final File classDir;
 
     private final Map<String, JavaFileObject> javaFileObjects =
             new HashMap<String, JavaFileObject>();
 
-    public CachedCompiler(@Nullable File sourceDir, @Nullable File classDir) {
+    public CachedCompiler(File sourceDir, File classDir) {
         this.sourceDir = sourceDir;
         this.classDir = classDir;
     }
@@ -66,25 +64,25 @@ public class CachedCompiler implements Closeable {
         }
     }
 
-    public Class loadFromJava(@NotNull String className, @NotNull String javaCode) throws ClassNotFoundException {
+    public Class loadFromJava(String className, String javaCode) throws ClassNotFoundException {
         return loadFromJava(getClass().getClassLoader(), className, javaCode, DEFAULT_WRITER);
     }
 
-    public Class loadFromJava(@NotNull ClassLoader classLoader,
-                              @NotNull String className,
-                              @NotNull String javaCode) throws ClassNotFoundException {
+    public Class loadFromJava(ClassLoader classLoader,
+                              String className,
+                              String javaCode) throws ClassNotFoundException {
         return loadFromJava(classLoader, className, javaCode, DEFAULT_WRITER);
     }
 
-    @NotNull
-    Map<String, byte[]> compileFromJava(@NotNull String className, @NotNull String javaCode, MyJavaFileManager fileManager) {
+
+    Map<String, byte[]> compileFromJava(String className, String javaCode, MyJavaFileManager fileManager) {
         return compileFromJava(className, javaCode, DEFAULT_WRITER, fileManager);
     }
 
-    @NotNull
-    Map<String, byte[]> compileFromJava(@NotNull String className,
-                                        @NotNull String javaCode,
-                                        final @NotNull PrintWriter writer,
+
+    Map<String, byte[]> compileFromJava(String className,
+                                        String javaCode,
+                                        final PrintWriter writer,
                                         MyJavaFileManager fileManager) {
         Iterable<? extends JavaFileObject> compilationUnits;
         if (sourceDir != null) {
@@ -118,10 +116,10 @@ public class CachedCompiler implements Closeable {
         return result;
     }
 
-    public Class loadFromJava(@NotNull ClassLoader classLoader,
-                              @NotNull String className,
-                              @NotNull String javaCode,
-                              @Nullable PrintWriter writer) throws ClassNotFoundException {
+    public Class loadFromJava(ClassLoader classLoader,
+                              String className,
+                              String javaCode,
+                              PrintWriter writer) throws ClassNotFoundException {
         Class clazz = null;
         Map<String, Class> loadedClasses;
         synchronized (loadedClassesMap) {
