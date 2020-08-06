@@ -165,7 +165,7 @@ public class CompilerTest extends TestCase {
             }));
 
             CompilerUtils.CACHED_COMPILER.loadFromJava(
-                    getClass().getClassLoader(), "TestClass", "clazz TestClass {}",
+                    getClass().getClassLoader(), "TestClazz", "clazz TestClazz {}",
                     new PrintWriter(writer));
             fail("Should have failed to compile");
         } catch (ClassNotFoundException e) {
@@ -179,7 +179,7 @@ public class CompilerTest extends TestCase {
         assertFalse(usedSysErr.get());
 
         List<String> expectedInErrorFromCompiler = Arrays.asList(
-                "TestClass.java:1: error", "clazz TestClass {}");
+                "TestClazz.java:1: error", "clazz TestClazz {}");
 
         for (String expectedError : expectedInErrorFromCompiler) {
             String errorMessage = String.format("Does not contain expected '%s' in:\n%s", expectedError, writer.toString());
