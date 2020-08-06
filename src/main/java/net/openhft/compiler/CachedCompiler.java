@@ -33,7 +33,6 @@ import java.util.*;
 
 import static net.openhft.compiler.CompilerUtils.*;
 
-@SuppressWarnings("StaticNonFinalField")
 public class CachedCompiler implements Closeable {
     private static final Logger LOG = LoggerFactory.getLogger(CachedCompiler.class);
     private static final PrintWriter DEFAULT_WRITER = new PrintWriter(System.err);
@@ -47,7 +46,7 @@ public class CachedCompiler implements Closeable {
     private final File classDir;
 
     private final Map<String, JavaFileObject> javaFileObjects =
-            new HashMap<String, JavaFileObject>();
+            new HashMap<>();
 
     public CachedCompiler(File sourceDir, File classDir) {
         this.sourceDir = sourceDir;
